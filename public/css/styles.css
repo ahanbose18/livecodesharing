@@ -54,18 +54,18 @@ video {
 	align-items: center;
 }
 
-.mainControls {
+/* .mainControls {
 	padding: 3px 5px 0px 5px;
 	display: flex;
 	background-color: #1a1a1a;
 	color: #a8a8a8;
 	justify-content: space-between;
-}
+} */
 
 .mainControlsBlock {
 	display: flex;
 }
-
+/* 
 .mainControlsButton {
 	letter-spacing: 0.3px;
 	display: flex;
@@ -77,9 +77,9 @@ video {
 	cursor: pointer;
 	font-size: 12px;
 	font-weight: 500;
-}
+} */
 
-.mainControlsButton svg {
+/* .mainControlsButton svg {
 	font-size: 19px;
 	margin-bottom: 4px;
 }
@@ -192,4 +192,4 @@ video {
 	border: none;
 	font-size: 13px;
 	outline: 0;
-}
+} */
