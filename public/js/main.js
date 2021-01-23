@@ -1,4 +1,9 @@
 const socket = io('/')
+
+
+// socket.emit('join-room', ROOM_ID, 1)
+
+
 const videoGrid = document.getElementById('videoGrid')
 const myVideo = document.createElement('video')
 myVideo.muted = true
@@ -8,7 +13,7 @@ var peer = new Peer()
 const myPeer = new Peer(undefined, {
 	path: '/peerjs',
 	host: '/',
-	port: '3000',
+	port: '2000',
 })
 
 const peers = {}
@@ -24,7 +29,7 @@ navigator.mediaDevices
 
 		socket.on('user-connected', (userId) => {
 			connectToNewUser(userId, stream)
-			alert('Somebody connected', userId)
+			alert(`${userId} joined`)
 		})
 
 		peer.on('call', (call) => {
@@ -44,30 +49,29 @@ navigator.mediaDevices
 			}
 		})
 
-		socket.on('createMessage', (message, userId) => {
-			$('ul').append(`<li >
-								<span class="messageHeader">
-									<span>
-										From 
-										<span class="messageSender">Someone</span> 
-										to 
-										<span class="messageReceiver">Everyone:</span>
-									</span>
-									${new Date().toLocaleString('en-US', {
-										hour: 'numeric',
-										minute: 'numeric',
-										hour12: true,
-									})}
-								</span>
-								<span class="message">${message}</span>
+		// socket.on('createMessage', (message, userId) => {
+		// 	$('ul').append(`<li >
+		// 						<span class="messageHeader">
+		// 							<span>
+		// 								<span class="messageSender">${userId}:</span> 
+									
+		// 							</span>
+		// 							${new Date().toLocaleString('en-US', {
+		// 								hour: 'numeric',
+		// 								minute: 'numeric',
+		// 								hour12: true,
+		// 							})}
+		// 						</span>
+		// 						<span class="message">${message}</span>
 							
-							</li>`)
-			scrollToBottom()
-		})
+		// 					</li>`)
+		// 	scrollToBottom()
+		// })
 	})
 
 socket.on('user-disconnected', (userId) => {
-	if (peers[userId]) peers[userId].close()
+    if (peers[userId]) peers[userId].close()
+    alert(`${userId} left`)
 })
 
 peer.on('open', (id) => {
@@ -80,9 +84,9 @@ const connectToNewUser = (userId, stream) => {
 	call.on('stream', (userVideoStream) => {
 		addVideoStream(video, userVideoStream)
 	})
-	call.on('close', () => {
-		video.remove()
-	})
+	// call.on('close', () => {
+	// 	video.remove()
+	// })
 
 	peers[userId] = call
 }
@@ -156,15 +160,34 @@ const setPlayVideo = () => {
 }
 
 
-const l = console.log
-function getEl(id) {
-    return document.getElementById(id)
-}
-const editor = getEl("editor")
-editor.addEventListener("keyup", (evt) => {
-    const text = editor.value
-    socket.send(text)
-})
+// const l = console.log
+// function getEl(id) {
+//     return document.getElementById(id)
+// }
+// const editor = getEl("editor")
+
+// editor.addEventListener("keyup", (evt) => {
+//     // const text = editor.value
+//     socket.send(text)
+// })
+// socket.on('message', (data) => {
+//     // editor.value = data
+//     codemirrorEditor.setValue(data)
+// })
+
+
+$(document).ready(function () {
+    codemirrorEditor.on('keyup', function () {
+        code = codemirrorEditor.getValue();
+        socket.send(code)
+        //alert(code)
+    });
+});
+
+
 socket.on('message', (data) => {
-    editor.value = data
-})
+    // editor.value = data
+    //alert(data);
+    codemirrorEditor.setValue(data);
+});
+
